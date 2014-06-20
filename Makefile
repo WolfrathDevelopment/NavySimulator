@@ -1,6 +1,6 @@
 #
 # Makefile
-# Dodson, Wolfrath, 2014
+# Dodson, Wolfrath 2014
 #
 
 CC= g++

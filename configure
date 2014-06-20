@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+#
+# configure
+# Dodson, Wolfrath 2014
+#
+# Configuration script, we need to make sure all these
+# dependencies are installed.
+#
+
+if [[ $EUID -ne 0 ]];
+then
+	echo "Please run as root"
+	exit 1
+fi
+
+LIBFI="libfreeimage-dev"
+dpkg -s $LIBFI > /dev/null
+
+if [[ $? -eq 0 ]];
+then
+	echo "Found $LIBFI."
+else
+	echo "Missing $LIBFI."
+fi
