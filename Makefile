@@ -10,7 +10,8 @@ OUT= simulator
 LIBS= -lglut -lfreeimage -lXmu -lXext -lGL -lXi -lGLU
 
 SOURCES= 	src/main.cpp \
-			src/GLManager.cpp
+			src/glmanager.cpp \
+			src/plane.cpp
 
 all:
 	$(CC) $(CFLAGS) $(SOURCES) -o $(OUT) $(LIBS)

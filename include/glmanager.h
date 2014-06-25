@@ -9,16 +9,19 @@
 #ifndef GLMANAGER_HEADER
 #define GLMANAGER_HEADER
 
-#include <GL/glut.h>
-#include <GL/glx.h>
+#include "stdhdr.h"
+#include "plane.h"
 
 class GLManager {
 public:
 	GLManager();
-	static void drawScreen(void);
+	void drawScreen(void);
 	void initialize(int*, char**);
+	void registerDisplayCallback(void (*)());
+	void registerSpecialCallback(void (*)(int,int,int));
 	void beginSimulation(void);
 private:
+	Plane simPlane;
 	const static GLuint WIDTH;
 	const static GLuint HEIGHT;
 	const static GLuint WIN_X;

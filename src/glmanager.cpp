@@ -6,7 +6,7 @@
  * Implementation for openGL functions
  */
 
-#include "GLManager.h"
+#include "glmanager.h"
 #include <iostream>
 
 /* Static Initialization */
@@ -19,23 +19,33 @@ const char * GLManager::WIN_TITLE = "Navy Simulator";
 
 void GLManager::drawScreen(void){
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glClearColor(0.0, 0.0, 0.0, 1.0);
-	glutSwapBuffers();
+	simPlane.draw();
 }
 
 GLManager::GLManager(){
+	
+	simPlane.setPointOne(-0.5, -0.5);
+	simPlane.setPointTwo(0.5, 0.5);
+}
 
+void GLManager::registerDisplayCallback(void (*callback)()){
+	glutDisplayFunc(callback);
+}
+
+void GLManager::registerSpecialCallback(void (*callback)(int,int,int)){
+	glutSpecialFunc(callback);
 }
 
 void GLManager::initialize(int* argc, char** argv){
 
 	glutInit(argc,argv);
+	glEnable(GL_DEPTH_TEST);
 	glutInitWindowSize(GLManager::WIDTH, GLManager::HEIGHT);
 	glutInitWindowPosition(GLManager::WIN_X, GLManager::WIN_Y);
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow(GLManager::WIN_TITLE);
-	glutDisplayFunc(drawScreen);
+	glClearColor(0.0, 0.0, 0.0, 0.0);
+	glShadeModel(GL_FLAT);
 }
 
 void GLManager::beginSimulation(){
