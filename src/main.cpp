@@ -7,53 +7,54 @@
  */
 
 #include <glmanager.h>
+#include "../usr/SimulationMgr.h"
 #include <stdlib.h>
 #include <iostream>
 
 /* Globals */
 
 GLManager manager;
-GLdouble rotate_x = 25;
-GLdouble rotate_y = 0;
+ATime* simTime;
+SimulationMgr smanager;
+
+/* wrapper sleep function */
+
+void delay(int ms) {
+
+#if defined(WIN32)
+    Sleep(ms);
+#else
+    struct timespec ts;
+    ts.tv_sec = ms/1000;
+    ts.tv_nsec = 1000000 * (ms%1000);
+    nanosleep(&ts,NULL);
+#endif
+}
 
 /* Callback functions */
 
+void idle_callback(void){
+
+	smanager = manager.getManager();
+	simTime = manager.getClock();
+
+	if (*simTime < smanager.getStop()) {
+    	smanager.simDoUpdate(*simTime);
+    	delay(1000);
+    	glutPostRedisplay();
+        *simTime += 60;  // add one minute
+		std::cout << *simTime << std::endl;
+    }
+}
+
 void display_callback(void){
 
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	glRotatef(rotate_x, 1.0, 0.0, 0.0);
-	glRotatef(rotate_y, 0.0, 1.0, 0.0);
-
 	manager.drawScreen();
-
-	glFlush();
-	glutSwapBuffers();
 }
 
 void special_callback(int key, int x, int y){
 
-	switch(key){
-
-	case GLUT_KEY_RIGHT:
-		rotate_y += 5;
-		break;
-
-	case GLUT_KEY_LEFT:
-		rotate_y -= 5;
-		break;
-
-	case GLUT_KEY_UP:
-		rotate_x += 5;
-		break;
-
-	case GLUT_KEY_DOWN:
-		rotate_x -= 5;
-		break;
-	}
-
-	glutPostRedisplay();
+	manager.handleSpecial(key,x,y);
 }
 
 /* Main routine */
@@ -66,6 +67,7 @@ int main(int argc, char** argv){
 	manager.initialize(&argc, argv);
 	manager.registerDisplayCallback(&display_callback);
 	manager.registerSpecialCallback(&special_callback);
+	manager.registerIdleCallback(&idle_callback);
 	manager.beginSimulation();
 
 	return 0;

@@ -1,0 +1,6 @@
+CreateCruiser USS_Virginia CGN-38 50 50
+
+StartSim 5/6/2011 10:00:00
+DeployShip  5/6/2011 10:00:00 CGN-38 0 2 90 25
+
+StopSim 5/6/2011 10:10:00
