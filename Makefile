@@ -1,21 +1,32 @@
-#
-# Makefile
-# Navy Simulator
-# Dodson, Wolfrath 2014
-#
-
 CC= g++
-CFLAGS= -O3 -I include/ usr/SimulationMgr.h
-OUT= simulator
+CFLAGS= -c -g -Wall -I include/ -I usr/ -Ofast -march=native
+SOURCES= $(shell find * -type f -name '*.cpp')
+OBJECTS= $(SOURCES:.cpp=.o)
+OUTPUT= simulator
+
 LIBS= -lglut -lfreeimage -lXmu -lXext -lGL -lXi -lGLU
 
-SOURCES= 	src/main.cpp \
-			src/glmanager.cpp \
-			src/plane.cpp \
-			usr/*.cpp
+# Are we compiling on a mac?
 
-all:
-	$(CC) $(CFLAGS) $(SOURCES) -o $(OUT) $(LIBS)
+UNAME= $(shell uname)
+
+ifeq ($(UNAME), "Darwin")
+LIBS= -framework Cocoa -framework OpenGL -framework GLUT
+endif
+
+
+all: $(SOURCES) $(OUTPUT)
+	@echo "Done."
+
+$(OUTPUT): $(OBJECTS)
+	@$(CC) $(OBJECTS) -o $@ $(LIBS)
+	@echo "LD $@"
+	@-rm $(OBJECTS)
+
+.cpp.o:
+	@$(CC) $(CFLAGS) $< -o $@
+	@echo "CC $<"
+	
 
 clean:
-	rm $(OUT)
+	@-rm -rf $(OBJECTS) $(OUTPUT)

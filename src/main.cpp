@@ -6,8 +6,8 @@
  * Navy Simulator entry point
  */
 
-#include <glmanager.h>
-#include "../usr/SimulationMgr.h"
+#include "glmanager.h"
+#include "SimulationMgr.h"
 #include <stdlib.h>
 #include <iostream>
 
