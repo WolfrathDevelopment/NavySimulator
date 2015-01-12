@@ -13,9 +13,10 @@
 
 /* Globals */
 
-GLManager manager;
-ATime* simTime;
-SimulationMgr smanager;
+static GLManager manager;
+static ATime* simTime;
+static SimulationMgr smanager;
+static bool waiting = false;
 
 /* wrapper sleep function */
 
@@ -29,6 +30,15 @@ void delay(int ms) {
     ts.tv_nsec = 1000000 * (ms%1000);
     nanosleep(&ts,NULL);
 #endif
+
+}
+
+void fireClock(int ignore){
+
+    glutPostRedisplay();
+    *simTime += 60;  // add one minute
+	std::cout << *simTime << std::endl;
+	waiting = false;
 }
 
 /* Callback functions */
@@ -38,12 +48,10 @@ void idle_callback(void){
 	smanager = manager.getManager();
 	simTime = manager.getClock();
 
-	if (*simTime < smanager.getStop()) {
+	if (*simTime < smanager.getStop() && !waiting) {
     	smanager.simDoUpdate(*simTime);
-    	delay(1000);
-    	glutPostRedisplay();
-        *simTime += 60;  // add one minute
-		std::cout << *simTime << std::endl;
+		waiting = true;
+		glutTimerFunc(1000, fireClock, 0);
     }
 }
 

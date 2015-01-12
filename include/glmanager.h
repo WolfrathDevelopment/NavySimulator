@@ -33,6 +33,7 @@ private:
 	const static GLuint HEIGHT;
 	const static GLuint WIN_X;
 	const static GLuint WIN_Y;
+	const static GLfloat PLANE_DIM;
 	const static char* WIN_TITLE;
 	GLdouble rotate_x, rotate_y;
 };

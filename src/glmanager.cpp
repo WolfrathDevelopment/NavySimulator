@@ -17,6 +17,7 @@ const GLuint GLManager::WIDTH = 800;
 const GLuint GLManager::HEIGHT = 600;
 const GLuint GLManager::WIN_X = 250;
 const GLuint GLManager::WIN_Y = 250;
+const GLfloat GLManager::PLANE_DIM = 0.5;
 const char * GLManager::WIN_TITLE = "Navy Simulator";
 
 /* Colors */
@@ -45,9 +46,18 @@ SimulationMgr GLManager::getManager(){
 
 void GLManager::drawScreen(void){
 
+	glDepthMask(GL_TRUE);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+
+	glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
+	glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
+
 	NavyMap* nm = this->manager.getNavy();
     NavyMap::iterator itr;
 	std::string status = "X ";
+
+	double x,y,z;
 
     for(itr = nm->begin(); itr != nm->end(); itr++){
 
@@ -61,17 +71,22 @@ void GLManager::drawScreen(void){
             status = "Not Deployed: ";
         }
 
-		std::cout << status << itr->first << std::endl;
+		(itr->second)->getLocation().getXYZ(x,y,z);
+
+		glPointSize(4.0);
+		glBegin(GL_POINTS);
+		glVertex3f((x / GLManager::WIDTH) * GLManager::PLANE_DIM,
+					 (y / GLManager::HEIGHT) * GLManager::PLANE_DIM, 0.0f);
+		glEnd();		
+
+		std::cout << " Original Loc: " << x << " " << y << " " << z << std::endl;
+		std::cout << status << itr->first << " Location: "
+				<< (x / GLManager::WIDTH) * GLManager::PLANE_DIM << " "
+				<< (y / GLManager::HEIGHT) * GLManager::PLANE_DIM << " "
+				<< " 0.0" << std::endl;
     }
 
 	std::cout << std::endl;
-
-	glDepthMask(GL_TRUE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glLoadIdentity();
-
-	glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
-	glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
 
 	simPlane.draw();
 
@@ -105,10 +120,10 @@ void GLManager::handleSpecial(int key, int x, int y){
 
 GLManager::GLManager(){
 	
-	this->rotate_x = 25;
+	this->rotate_x = 0;
 	this->rotate_y = 0;
-	simPlane.setPointOne(-0.5, -0.5);
-	simPlane.setPointTwo(0.5, 0.5);
+	simPlane.setPointOne(-GLManager::PLANE_DIM, -GLManager::PLANE_DIM);
+	simPlane.setPointTwo(GLManager::PLANE_DIM, GLManager::PLANE_DIM);
 }
 
 void GLManager::registerDisplayCallback(void (*callback)()){
@@ -141,20 +156,6 @@ void GLManager::beginSimulation(){
 	this->simClock = this->manager.getStart();
 	glutMainLoop();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
