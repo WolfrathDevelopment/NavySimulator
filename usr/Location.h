@@ -21,6 +21,7 @@ public:
 	void getX(double&);
 	void getY(double&);
 	void getZ(double&);
+	void print();
 	bool operator==(Location);
 	ATime getTime();
 private:

@@ -5,6 +5,7 @@
  */
 
 #include "Location.h"
+#include <iostream>
 
 Location::Location(){
 	x = y = z = 0.0;
@@ -20,6 +21,12 @@ Location::Location(double x,double y,double z){
 	this->x = x;
 	this->y = y;
 	this->z = z;
+}
+
+void Location::print(){
+	std::cout << x
+			<< ", " << y
+			<< ", " << z << std::endl;
 }
 
 void Location::getXY(double& x_pos, double& y_pos) const{

@@ -5,6 +5,7 @@
  */
 
 #include "SimulationMgr.h"
+#include <iostream>
 
 using namespace std;
 
@@ -163,6 +164,8 @@ NavyMap* SimulationMgr::getNavy(){
 }
 
 void SimulationMgr::simDoUpdate(ATime now){
+
+	std::cout << "UPDATE: " << now << std::endl;
 
 	NavyMap::iterator it;
 	Order* temp;

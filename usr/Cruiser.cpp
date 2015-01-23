@@ -16,9 +16,15 @@ Movable(name,id,maxSpeed){
 
 void Cruiser::updatePosition(ATime current){
 
+	std::cout << "Prev Location: ";
+	currentLocation.print();
+
 	if(deployed){
 		currentLocation = calculatePosition(current,this->currentLocation.getTime());
 	}
+
+	std::cout << "Next Location: ";
+	currentLocation.print();
 
 	history.push_back(currentLocation);
 }

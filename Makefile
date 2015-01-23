@@ -1,5 +1,6 @@
 CC= g++
-CFLAGS= -c -g -Wall -I include/ -I usr/ -Ofast -march=native
+#CFLAGS= -c -g -Wall -I include/ -I usr/ -O2 -march=native
+CFLAGS= -c -g -Wall -I include/ -I usr/
 SOURCES= $(shell find * -type f -name '*.cpp')
 OBJECTS= $(SOURCES:.cpp=.o)
 OUTPUT= simulator

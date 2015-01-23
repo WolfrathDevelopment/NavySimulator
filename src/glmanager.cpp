@@ -58,7 +58,7 @@ void GLManager::drawScreen(void){
 	std::string status = "X ";
 
 	double x,y,z;
-
+/*
     for(itr = nm->begin(); itr != nm->end(); itr++){
 
         if ((itr->second)->isDeployed()) {
@@ -85,7 +85,7 @@ void GLManager::drawScreen(void){
 				<< (y / GLManager::HEIGHT) * GLManager::PLANE_DIM << " "
 				<< " 0.0" << std::endl;
     }
-
+*/
 	std::cout << std::endl;
 
 	simPlane.draw();
@@ -120,7 +120,7 @@ void GLManager::handleSpecial(int key, int x, int y){
 
 GLManager::GLManager(){
 	
-	this->rotate_x = 0;
+	this->rotate_x = -90;
 	this->rotate_y = 0;
 	simPlane.setPointOne(-GLManager::PLANE_DIM, -GLManager::PLANE_DIM);
 	simPlane.setPointTwo(GLManager::PLANE_DIM, GLManager::PLANE_DIM);
@@ -138,6 +138,15 @@ void GLManager::registerIdleCallback(void (*callback)()){
 	glutIdleFunc(callback);
 }
 
+static void onclick(unsigned char key, int x, int y){
+
+	switch(key){
+	case 27:
+		exit(0);
+	}
+}
+
+
 void GLManager::initialize(int* argc, char** argv){
 
 	glutInit(argc,argv);
@@ -148,11 +157,13 @@ void GLManager::initialize(int* argc, char** argv){
 	glClearColor(0.0, 0.0, 0.0, 1.0);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
+	glutKeyboardFunc(onclick);
 }
 
 void GLManager::beginSimulation(){
 
-	this->manager.simInit("usr/Orders.txt");
+	//this->manager.simInit("usr/Orders.txt");
+	this->manager.simInit("usr/SimpleOrder.txt");
 	this->simClock = this->manager.getStart();
 	glutMainLoop();
 }

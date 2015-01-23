@@ -6,6 +6,7 @@
 
 #include "Movable.h"
 #include <math.h>
+#include <iostream>
 
 using namespace std;
 
@@ -80,7 +81,6 @@ Location Movable::calculatePosition(ATime one,ATime two){
 	new_x = sin(theta)*hyp + x;
 	new_y = cos(theta)*hyp + y;
 	ret.update(one,new_x,new_y,z);
-	//currentLocation.update(one,new_x,new_y,z);
 
 	return ret;
 }

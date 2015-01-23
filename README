@@ -1,0 +1,17 @@
+*******************************************************************************
+********                   DR SCHULZ'S NAVY SIMULATOR                   *******
+*******************************************************************************
+
+This program was designed to be the supporting graphics engine for the Navy
+Simulation project in CSC-231. In order to configure what features you would
+like to use, toggle the options (between 0 or 1) in the CONFIG.txt file.
+
+Using this engine requires certain convetions in order to properly interface.
+They are as follows:
+
+1. All student files should be copied into the usr/ directory in order to be
+ included and compiled (this may differ on Microsoft machines).
+
+2. Class Names
+
+3. Function Names
