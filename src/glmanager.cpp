@@ -8,8 +8,12 @@
 
 #include "glmanager.h"
 #include "../usr/SimulationMgr.h"
+#include "hud.h"
 #include <iostream>
 #include <string>
+#include <sstream>
+
+using namespace std;
 
 /* Static Initialization */
 
@@ -17,7 +21,7 @@ const GLuint GLManager::WIDTH = 800;
 const GLuint GLManager::HEIGHT = 600;
 const GLuint GLManager::WIN_X = 250;
 const GLuint GLManager::WIN_Y = 250;
-const GLfloat GLManager::PLANE_DIM = 0.5;
+const GLfloat GLManager::PLANE_DIM = 0.75;
 const char * GLManager::WIN_TITLE = "Navy Simulator";
 
 /* Colors */
@@ -25,15 +29,15 @@ const char * GLManager::WIN_TITLE = "Navy Simulator";
 enum COLORS { RED = 0, GREEN, BLUE, PURPLE, YELLOW };
 const GLdouble colors[][4] = {
     { 1.0, 0.0, 0.0, 0.0 },
-    { 0.0, 0.0, 1.0, 0.0 },
     { 1.0, 0.1, 1.0, 0.0 },
-    { 0.8, 0.8, 0.5, 0.0 },
     { 0.0, 1.0, 1.0, 0.0 },
+    { 0.8, 0.8, 0.5, 0.0 },
     { 1.0, 0.5, 0.5, 0.0 },
     { 0.5, 1.0, 0.5, 0.0 },
     { 0.2, 0.3, 0.7, 0.0 },
     { 0.5, 0.5, 1.0, 0.0 },
     { 0.05, 0.05, 0.5, 0.0 },
+    { 0.0, 0.0, 1.0, 0.0 },
 };
 
 ATime* GLManager::getClock(){
@@ -55,40 +59,54 @@ void GLManager::drawScreen(void){
 
 	NavyMap* nm = this->manager.getNavy();
     NavyMap::iterator itr;
-	std::string status = "X ";
+	HistoryList* hlist;
+	HistoryList::iterator itr2;
 
+	int colorIndex = 0;
 	double x,y,z;
-/*
+
     for(itr = nm->begin(); itr != nm->end(); itr++){
 
-        if ((itr->second)->isDeployed()) {
-            status = "Is Deployed: ";
-        }
-        else if ((itr->second)->wasDeployed()) {
-            status = "Was Deployed: ";
-        }
-        else {
-            status = "Not Deployed: ";
-        }
+		Movable* obj = (itr->second);
+		hlist = obj->getHistory();
 
-		(itr->second)->getLocation().getXYZ(x,y,z);
+		obj->getLocation().getXYZ(x,y,z);
 
-		glPointSize(4.0);
-		glBegin(GL_POINTS);
-		glVertex3f((x / GLManager::WIDTH) * GLManager::PLANE_DIM,
-					 (y / GLManager::HEIGHT) * GLManager::PLANE_DIM, 0.0f);
-		glEnd();		
+		glPointSize(2.0);
+		glColor3f(colors[colorIndex][0],
+					colors[colorIndex][1],
+					colors[colorIndex][2]);
+		colorIndex++;
+		glBegin(GL_LINE_STRIP);
 
-		std::cout << " Original Loc: " << x << " " << y << " " << z << std::endl;
-		std::cout << status << itr->first << " Location: "
-				<< (x / GLManager::WIDTH) * GLManager::PLANE_DIM << " "
-				<< (y / GLManager::HEIGHT) * GLManager::PLANE_DIM << " "
-				<< " 0.0" << std::endl;
+
+		glVertex3f((x / GLManager::WIDTH) * GLManager::PLANE_DIM * 5,
+					 (y / GLManager::HEIGHT) * GLManager::PLANE_DIM * 5, 0.0f);
+
+		for(itr2 = hlist->begin(); itr2 != hlist->end(); itr2++){
+
+			itr2->getXYZ(x,y,z);
+
+			glVertex3f((x / GLManager::WIDTH) * GLManager::PLANE_DIM * 5,
+					 (y / GLManager::HEIGHT) * GLManager::PLANE_DIM * 5, 0.0f);
+		}
+
+		glEnd();
+
+		obj->getLocation().getXYZ(x,y,z);
     }
-*/
-	std::cout << std::endl;
 
 	simPlane.draw();
+
+	/* Overlay HUD */
+
+	glPushMatrix();
+	glLoadIdentity();
+	glClear(GL_DEPTH_BUFFER_BIT);
+
+	renderHUD(getClock(), nm);
+
+	glPopMatrix();
 
 	glFlush();
 	glutSwapBuffers();
@@ -163,7 +181,7 @@ void GLManager::initialize(int* argc, char** argv){
 void GLManager::beginSimulation(){
 
 	//this->manager.simInit("usr/Orders.txt");
-	this->manager.simInit("usr/SimpleOrder.txt");
+	this->manager.simInit("usr/Orders.txt");
 	this->simClock = this->manager.getStart();
 	glutMainLoop();
 }

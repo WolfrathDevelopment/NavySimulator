@@ -23,6 +23,7 @@ public:
 	void registerSpecialCallback(void (*)(int,int,int));
 	void registerIdleCallback(void (*)());
 	void beginSimulation(void);
+	void drawKey();
 	ATime* getClock();
 	SimulationMgr getManager();
 private:

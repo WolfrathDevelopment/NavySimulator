@@ -22,7 +22,6 @@ all: $(SOURCES) $(OUTPUT)
 $(OUTPUT): $(OBJECTS)
 	@$(CC) $(OBJECTS) -o $@ $(LIBS)
 	@echo "LD $@"
-	@-rm $(OBJECTS)
 
 .cpp.o:
 	@$(CC) $(CFLAGS) $< -o $@

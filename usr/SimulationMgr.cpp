@@ -165,10 +165,10 @@ NavyMap* SimulationMgr::getNavy(){
 
 void SimulationMgr::simDoUpdate(ATime now){
 
-	std::cout << "UPDATE: " << now << std::endl;
-
 	NavyMap::iterator it;
 	Order* temp;
+
+	//std::cout << "queue size: " << queue.size() << std::endl;
 
 	while(queue.size()){
 
@@ -178,11 +178,14 @@ void SimulationMgr::simDoUpdate(ATime now){
 
 		queue.pop_front();
 
-		it = objectMap.find(temp->get_id());
-		if(it != objectMap.end())
-			temp->Execute(it->second,now);
-	}
+		if(temp->exectime() == now){
 
+			it = objectMap.find(temp->get_id());
+			if(it != objectMap.end())
+				temp->Execute(it->second,now);	
+		}
+	}
+	
 	sendUpdateCommand(now);
 }
 
@@ -200,7 +203,16 @@ void SimulationMgr::sendUpdateCommand(ATime now){
 }
 
 void SimulationMgr::printOrders(){
+
+	std::cout << "ORDER DUMP" << std::endl;
 	
+	OrderQueue::iterator itr = queue.begin();
+
+	while(itr != queue.end()){
+
+		std::cout << "\t" << (*itr)->get_id() << std::endl;
+		itr++;
+	}
 }
 
 void SimulationMgr::printNavy(){

@@ -18,6 +18,7 @@ static ATime* simTime;
 static SimulationMgr smanager;
 static bool waiting = false;
 
+
 /* wrapper sleep function */
 
 void delay(int ms) {
@@ -36,7 +37,7 @@ void delay(int ms) {
 void fireClock(int ignore){
 
     glutPostRedisplay();
-	std::cout << *simTime << std::endl;
+	*simTime += 60;
 	waiting = false;
 }
 
@@ -48,7 +49,9 @@ void idle_callback(void){
 	simTime = manager.getClock();
 
 	if (*simTime < smanager.getStop() && !waiting) {
-    	*simTime += 60;  // add one minute
+
+		//smanager.printOrders();
+	
     	smanager.simDoUpdate(*simTime);
 		waiting = true;
 		glutTimerFunc(1000, fireClock, 0);

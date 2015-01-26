@@ -24,7 +24,7 @@ Location::Location(double x,double y,double z){
 }
 
 void Location::print(){
-	std::cout << x
+	std::cout << time << " | " << x
 			<< ", " << y
 			<< ", " << z << std::endl;
 }

@@ -46,8 +46,11 @@ string ATime::getSVal() const{
 
 	now = localtime(&time);
 	os << "Current Date: " << now->tm_mon+1 << "/" <<now->tm_wday << "/" << now->tm_year+1900 << "    ";
+	//os << now->tm_mon+1 << "/" <<now->tm_wday << "/" << now->tm_year+1900;
 
 	os << "Time of Day: ";
+	//os << " ";
+
 	if(now->tm_hour < 10)
 		os << "0" << now->tm_hour << ":";
 	else
