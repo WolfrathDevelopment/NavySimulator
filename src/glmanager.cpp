@@ -9,9 +9,12 @@
 #include "glmanager.h"
 #include "../usr/SimulationMgr.h"
 #include "hud.h"
+#include "drawable.h"
 #include <iostream>
 #include <string>
 #include <sstream>
+
+static DrawableOBJ plane;
 
 using namespace std;
 
@@ -54,6 +57,8 @@ void GLManager::drawScreen(void){
 	glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
 	glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
 
+	simPlane.draw();
+
 	NavyMap* nm = this->manager.getNavy();
     NavyMap::iterator itr;
 	HistoryList* hlist;
@@ -61,8 +66,11 @@ void GLManager::drawScreen(void){
 
 	int colorIndex = 0;
 	double x,y,z;
+	bool draw3D, drawShip, drawPlane;
 
     for(itr = nm->begin(); itr != nm->end(); itr++){
+
+		draw3D = drawShip = drawPlane = false;
 
 		Movable* obj = (itr->second);
 		hlist = obj->getHistory();
@@ -76,6 +84,19 @@ void GLManager::drawScreen(void){
 		else{
 			glColor4dv(colors[colorIndex++]);
 			glDisable(GL_LINE_STIPPLE);
+			draw3D = true;
+		}
+
+		double z2, mult;
+		if(z < 1.0){
+			z2 = 0.0f;
+			mult = 10.0;
+			drawShip = true;
+		}
+		else{
+			z2 = z / 50000.0;
+			mult = 2.0;
+			drawPlane = true;
 		}
 
 		glBegin(GL_LINE_STRIP);
@@ -83,26 +104,37 @@ void GLManager::drawScreen(void){
 		for(itr2 = hlist->begin(); itr2 != hlist->end(); itr2++){
 
 			itr2->getXYZ(x,y,z);
-
-			double z2;
-			double mult;
-
-			if(z < 1.0){
-				z2 = 0.0f;
-				mult = 10.0;
-			}
-			else{
-				z2 = z / 50000.0;
-				mult = 2.0;
-			}
-
 			glVertex3d((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
 		}
 
 		glEnd();
-    }
 
-	simPlane.draw();
+		glDisable(GL_LINE_STIPPLE);
+
+		/* DRAW 3D Object */
+
+		if(draw3D){
+	
+			if(drawPlane){
+
+				glPushMatrix();
+				glLoadIdentity();
+
+				glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
+				glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
+
+				glScalef(0.01,0.01,0.01);
+				//glTranslated((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
+				glTranslated(50.0,50.0,50.0);
+//				glRotatef(-90, 1.0, 0.0, 0.0);
+//				glRotatef(-90, 0.0, 1.0, 0.0);
+//				glRotatef(-90, 0.0, 0.0, 1.0);
+				plane.draw();
+
+				glPopMatrix();
+			}
+		}
+	}
 
 	/* Overlay HUD */
 
@@ -171,6 +203,8 @@ static void onclick(unsigned char key, int x, int y){
 
 void GLManager::initialize(int* argc, char** argv){
 
+	std::cout << "Loading Models..." << std::endl;
+
 	glutInit(argc,argv);
 	glutInitWindowSize(GLManager::WIDTH, GLManager::HEIGHT);
 	glutInitWindowPosition(GLManager::WIN_X, GLManager::WIN_Y);
@@ -182,6 +216,8 @@ void GLManager::initialize(int* argc, char** argv){
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
 	glutKeyboardFunc(onclick);
+
+	plane.parseFromFile("obj/plane.obj");
 }
 
 void GLManager::beginSimulation(string orderFile){
