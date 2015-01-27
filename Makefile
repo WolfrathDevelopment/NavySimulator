@@ -30,3 +30,6 @@ $(OUTPUT): $(OBJECTS)
 
 clean:
 	@-rm -rf $(OBJECTS) $(OUTPUT)
+
+love:
+	@echo "Not war?"

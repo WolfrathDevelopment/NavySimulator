@@ -6,6 +6,7 @@
  */
 
 #include "hud.h"
+#include "glmanager.h"
 #include <sstream>
 #include <string>
 #include <iostream>
@@ -35,10 +36,12 @@ void renderHUD(ATime* time, NavyMap* map){
                                         timestr[i]);
     }
 
+	int colorIndex = 0;
 	y_loc -= y_diff;
 
     for (nmi=map->begin(); nmi!=map->end(); nmi++) {
 
+		glColor4dv(colors[colorIndex++]);
         glRasterPos3f(x_loc, y_loc, 0.1f);
 
         if ((nmi->second)->isDeployed()) {

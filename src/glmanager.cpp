@@ -24,9 +24,6 @@ const GLuint GLManager::WIN_Y = 250;
 const GLfloat GLManager::PLANE_DIM = 0.75;
 const char * GLManager::WIN_TITLE = "Navy Simulator";
 
-/* Colors */
-
-enum COLORS { RED = 0, GREEN, BLUE, PURPLE, YELLOW };
 const GLdouble colors[][4] = {
     { 1.0, 0.0, 0.0, 0.0 },
     { 1.0, 0.1, 1.0, 0.0 },
@@ -69,31 +66,32 @@ void GLManager::drawScreen(void){
 
 		Movable* obj = (itr->second);
 		hlist = obj->getHistory();
-
 		obj->getLocation().getXYZ(x,y,z);
 
-		glPointSize(2.0);
-		glColor3f(colors[colorIndex][0],
-					colors[colorIndex][1],
-					colors[colorIndex][2]);
-		colorIndex++;
+		//if((nmi->second)->wasDeployed() && !(nmi->second)->isDeployed())
+		glColor4dv(colors[colorIndex++]);
 		glBegin(GL_LINE_STRIP);
-
-
-		glVertex3f((x / GLManager::WIDTH) * GLManager::PLANE_DIM * 5,
-					 (y / GLManager::HEIGHT) * GLManager::PLANE_DIM * 5, 0.0f);
 
 		for(itr2 = hlist->begin(); itr2 != hlist->end(); itr2++){
 
 			itr2->getXYZ(x,y,z);
 
-			glVertex3f((x / GLManager::WIDTH) * GLManager::PLANE_DIM * 5,
-					 (y / GLManager::HEIGHT) * GLManager::PLANE_DIM * 5, 0.0f);
+			double z2;
+			double mult;
+
+			if(z < 1.0){
+				z2 = 0.0f;
+				mult = 10.0;
+			}
+			else{
+				z2 = z / 50000.0;
+				mult = 2.0;
+			}
+
+			glVertex3d((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
 		}
 
 		glEnd();
-
-		obj->getLocation().getXYZ(x,y,z);
     }
 
 	simPlane.draw();
@@ -107,8 +105,6 @@ void GLManager::drawScreen(void){
 	renderHUD(getClock(), nm);
 
 	glPopMatrix();
-
-	glFlush();
 	glutSwapBuffers();
 }
 
@@ -173,6 +169,8 @@ void GLManager::initialize(int* argc, char** argv){
 	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
 	glutCreateWindow(GLManager::WIN_TITLE);
 	glClearColor(0.0, 0.0, 0.0, 1.0);
+	glPointSize(2.0);
+	glLineWidth(2.0);
 	glEnable(GL_DEPTH_TEST);
 	glShadeModel(GL_SMOOTH);
 	glutKeyboardFunc(onclick);
@@ -180,7 +178,7 @@ void GLManager::initialize(int* argc, char** argv){
 
 void GLManager::beginSimulation(){
 
-	//this->manager.simInit("usr/Orders.txt");
+	//this->manager.simInit("usr/SimpleOrder.txt");
 	this->manager.simInit("usr/Orders.txt");
 	this->simClock = this->manager.getStart();
 	glutMainLoop();

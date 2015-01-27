@@ -13,6 +13,8 @@
 #include "plane.h"
 #include "../usr/SimulationMgr.h"
 
+extern const GLdouble colors[][4];
+
 class GLManager {
 public:
 	GLManager();

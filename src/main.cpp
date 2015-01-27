@@ -15,7 +15,6 @@
 
 static GLManager manager;
 static ATime* simTime;
-static SimulationMgr smanager;
 static bool waiting = false;
 
 
@@ -45,7 +44,7 @@ void fireClock(int ignore){
 
 void idle_callback(void){
 
-	smanager = manager.getManager();
+	SimulationMgr smanager = manager.getManager();
 	simTime = manager.getClock();
 
 	if (*simTime < smanager.getStop() && !waiting) {
