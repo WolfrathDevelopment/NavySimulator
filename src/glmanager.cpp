@@ -68,8 +68,16 @@ void GLManager::drawScreen(void){
 		hlist = obj->getHistory();
 		obj->getLocation().getXYZ(x,y,z);
 
-		//if((nmi->second)->wasDeployed() && !(nmi->second)->isDeployed())
-		glColor4dv(colors[colorIndex++]);
+		if((itr->second)->wasDeployed() && !(itr->second)->isDeployed()){
+			glColor4d(0.8,0.8,0.8,0.0);
+			glEnable(GL_LINE_STIPPLE);
+			glLineStipple(2,0xAAAA);
+		}
+		else{
+			glColor4dv(colors[colorIndex++]);
+			glDisable(GL_LINE_STIPPLE);
+		}
+
 		glBegin(GL_LINE_STRIP);
 
 		for(itr2 = hlist->begin(); itr2 != hlist->end(); itr2++){

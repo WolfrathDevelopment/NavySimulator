@@ -54,6 +54,7 @@ Location Fighter::calculatePosition(ATime one,ATime two){
 		run = x1-x2;
 		rise = y1-y2;
 		d = sqrt(pow(run,2) + pow(rise,2));
+
 		heading = 90.0 - toDegrees(atan2(rise,run));
 
 		if(hasLanded(d)){
