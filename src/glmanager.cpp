@@ -184,13 +184,14 @@ void GLManager::initialize(int* argc, char** argv){
 	glutKeyboardFunc(onclick);
 }
 
-void GLManager::beginSimulation(){
+void GLManager::beginSimulation(string orderFile){
 
-	//this->manager.simInit("usr/SimpleOrder.txt");
-	this->manager.simInit("usr/Orders.txt");
+	if(!this->manager.simInit(orderFile)){
+		std::cout << "Simulation failed" << std::endl;
+		exit(1);
+	}
 	this->simClock = this->manager.getStart();
 	glutMainLoop();
 }
-
 
 

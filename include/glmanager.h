@@ -12,6 +12,9 @@
 #include "stdhdr.h"
 #include "plane.h"
 #include "../usr/SimulationMgr.h"
+#include <string>
+
+using std::string;
 
 extern const GLdouble colors[][4];
 
@@ -24,7 +27,7 @@ public:
 	void registerDisplayCallback(void (*)());
 	void registerSpecialCallback(void (*)(int,int,int));
 	void registerIdleCallback(void (*)());
-	void beginSimulation(void);
+	void beginSimulation(string);
 	void drawKey();
 	ATime* getClock();
 	SimulationMgr getManager();

@@ -27,6 +27,9 @@ bool SimulationMgr::getOrders(string path){
 		stream.open(path.c_str(),ios::in);
 	}catch(...){ return false;}
 
+	if(!stream.good())
+		return false;
+
 	while(!stream.eof()){
 
 		string line;

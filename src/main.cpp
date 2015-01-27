@@ -73,12 +73,16 @@ int main(int argc, char** argv){
 
 	/* Command Line Args ? */
 
+	if(argc < 2){
+		std::cout << "Usage: " << argv[0] << " <order file>" <<std::endl;
+		return 1;
+	}
 	
 	manager.initialize(&argc, argv);
 	manager.registerDisplayCallback(&display_callback);
 	manager.registerSpecialCallback(&special_callback);
 	manager.registerIdleCallback(&idle_callback);
-	manager.beginSimulation();
+	manager.beginSimulation(argv[1]);
 
 	return 0;
 }
