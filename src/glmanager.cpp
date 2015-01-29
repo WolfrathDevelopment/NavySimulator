@@ -125,12 +125,9 @@ void GLManager::drawScreen(void){
 				glPushMatrix();
 				glLoadIdentity();
 
-				//glScalef(0.01,0.01,0.01);
-				//glTranslated(50.0,50.0,50.0);
 				glTranslatef((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
 				glRotatef(-90, 1.0, 0.0, 0.0);
 				glRotatef(-180 + obj->getHeading(), 0.0, 0.0, 1.0);
-				//glTranslated(50.0,50.0,50.0);
 				glScalef(0.005,0.005,0.005);
 				plane.draw();
 
