@@ -52,10 +52,15 @@ void GLManager::drawScreen(void){
 
 	glDepthMask(GL_TRUE);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 
 	glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
 	glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	simPlane.draw();
 
@@ -120,15 +125,13 @@ void GLManager::drawScreen(void){
 				glPushMatrix();
 				glLoadIdentity();
 
-				glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
-				glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
-
-				glScalef(0.01,0.01,0.01);
-				//glTranslated((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
-				glTranslated(50.0,50.0,50.0);
-//				glRotatef(-90, 1.0, 0.0, 0.0);
-//				glRotatef(-90, 0.0, 1.0, 0.0);
-//				glRotatef(-90, 0.0, 0.0, 1.0);
+				//glScalef(0.01,0.01,0.01);
+				//glTranslated(50.0,50.0,50.0);
+				glTranslatef((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
+				glRotatef(-90, 1.0, 0.0, 0.0);
+				glRotatef(-180 + obj->getHeading(), 0.0, 0.0, 1.0);
+				//glTranslated(50.0,50.0,50.0);
+				glScalef(0.005,0.005,0.005);
 				plane.draw();
 
 				glPopMatrix();
@@ -138,6 +141,7 @@ void GLManager::drawScreen(void){
 
 	/* Overlay HUD */
 
+	glMatrixMode(GL_PROJECTION);
 	glPushMatrix();
 	glLoadIdentity();
 	glClear(GL_DEPTH_BUFFER_BIT);
