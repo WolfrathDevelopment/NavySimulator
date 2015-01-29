@@ -15,6 +15,7 @@
 #include <sstream>
 
 static DrawableOBJ plane;
+static DrawableOBJ boat;
 
 using namespace std;
 
@@ -128,10 +129,23 @@ void GLManager::drawScreen(void){
 				glTranslatef((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
 				glRotatef(-90, 1.0, 0.0, 0.0);
 				glRotatef(-180 + obj->getHeading(), 0.0, 0.0, 1.0);
-				glScalef(0.005,0.005,0.005);
+				glScalef(0.005,0.005,0.01);
 				plane.draw();
 
 				glPopMatrix();
+			}
+
+			if(drawShip){
+			
+				glPushMatrix();
+				glLoadIdentity();
+
+				glTranslatef((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
+				glRotatef(obj->getHeading(), 0.0, 1.0, 0.0);
+				glScalef(0.02,0.04,0.02);
+			
+				boat.draw();
+				glPopMatrix();	
 			}
 		}
 	}
@@ -219,6 +233,7 @@ void GLManager::initialize(int* argc, char** argv){
 	glutKeyboardFunc(onclick);
 
 	plane.parseFromFile("obj/plane.obj");
+	boat.parseFromFile("obj/boat.obj");
 }
 
 void GLManager::beginSimulation(string orderFile){

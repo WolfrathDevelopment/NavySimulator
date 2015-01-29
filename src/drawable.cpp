@@ -6,6 +6,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
+#include <iterator>
 #include <inttypes.h>
 
 using std::string;
@@ -49,24 +50,26 @@ bool DrawableOBJ::parseFromFile(string file){
 			temp_normals.push_back(norm);
 		}
 		else if(header == "f"){
-			uint32_t v[3], tx[3], n[3];
+			uint32_t v, tx, n;
 
 			string remainder;
 			getline(sstream, remainder);
+
+			std::stringstream dummy(remainder);
+			int count = std::distance(std::istream_iterator<std::string>(dummy), 
+										std::istream_iterator<std::string>());
+		
+			size_t slashes = std::count(remainder.begin(), remainder.end(), '/');
 			std::replace(remainder.begin(), remainder.end(), '/', ' ');
 			istringstream lastStream(remainder);
 
-			lastStream 	>> v[0] >> tx[0] >> n[0]
-						>> v[1] >> tx[1] >> n[1]
-						>> v[2] >> tx[2] >> n[2];
-
-			vertexIndices.push_back(v[0]);
-			vertexIndices.push_back(v[1]);
-			vertexIndices.push_back(v[2]);
-
-			normalIndices.push_back(n[0]);
-			normalIndices.push_back(n[1]);
-			normalIndices.push_back(n[2]);
+			if((slashes / count) == 2){
+				
+				while(lastStream >> v >> tx >> n){
+					vertexIndices.push_back(v);
+					normalIndices.push_back(n);
+				}
+			}
 		}
 		else
 			continue;
