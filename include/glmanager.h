@@ -42,6 +42,7 @@ private:
 	const static GLfloat PLANE_DIM;
 	const static char* WIN_TITLE;
 	GLdouble rotate_x, rotate_y;
+	GLdouble scale;
 };
 
 #endif /* GLMANAGER_HEADER */

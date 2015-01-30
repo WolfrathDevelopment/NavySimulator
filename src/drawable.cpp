@@ -26,7 +26,7 @@ bool DrawableOBJ::parseFromFile(string file){
 		return false;
 
 	std::vector< uint32_t > vertexIndices, normalIndices;
-	std::vector< glm::vec3 > temp_vertices, temp_normals;
+	std::vector< vec3 > temp_vertices, temp_normals;
 
 	while(!stream.eof()){
 
@@ -39,13 +39,13 @@ bool DrawableOBJ::parseFromFile(string file){
 
 		if(header == "v"){
 
-			glm::vec3 vertex;
+			vec3 vertex;
 			sstream >> vertex.x >> vertex.y >> vertex.z;
 			temp_vertices.push_back(vertex);
 		}
 		else if(header == "vn"){
 			
-			glm::vec3 norm;
+			vec3 norm;
 			sstream >> norm.x >> norm.y >> norm.z;
 			temp_normals.push_back(norm);
 		}
@@ -80,8 +80,8 @@ bool DrawableOBJ::parseFromFile(string file){
 	for(unsigned int i=0; i < vertexIndices.size(); i++){
 		int v_idx = vertexIndices[i];
 		int n_idx = normalIndices[i];
-		glm::vec3 vertex = temp_vertices[v_idx - 1];
-		glm::vec3 normal = temp_normals[n_idx - 1];
+		vec3 vertex = temp_vertices[v_idx - 1];
+		vec3 normal = temp_normals[n_idx - 1];
 		vertices.push_back(vertex);
 		normals.push_back(normal);
 	}
@@ -95,7 +95,7 @@ void DrawableOBJ::draw(){
 
 	for(unsigned int i=0; i<vertices.size(); i++){
 
-		glm::vec3 vert, norm;
+		vec3 vert, norm;
 		vert = vertices[i];
 		norm = normals[i];
 

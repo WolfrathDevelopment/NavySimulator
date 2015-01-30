@@ -29,16 +29,16 @@ const GLfloat GLManager::PLANE_DIM = 0.75;
 const char * GLManager::WIN_TITLE = "Navy Simulator";
 
 const GLdouble colors[][4] = {
-    { 1.0, 0.0, 0.0, 0.0 },
-    { 1.0, 0.1, 1.0, 0.0 },
-    { 0.0, 1.0, 1.0, 0.0 },
-    { 0.8, 0.8, 0.5, 0.0 },
-    { 1.0, 0.5, 0.5, 0.0 },
-    { 0.5, 1.0, 0.5, 0.0 },
-    { 0.2, 0.3, 0.7, 0.0 },
-    { 0.5, 0.5, 1.0, 0.0 },
-    { 0.05, 0.05, 0.5, 0.0 },
-    { 0.0, 0.0, 1.0, 0.0 },
+    { 1.0, 0.0, 0.0, 0.3 },
+    { 1.0, 0.1, 1.0, 0.3 },
+    { 0.0, 1.0, 1.0, 0.3 },
+    { 0.8, 0.8, 0.5, 0.3 },
+    { 1.0, 0.5, 0.5, 0.3 },
+    { 0.5, 1.0, 0.5, 0.3 },
+    { 0.2, 0.3, 0.7, 0.3 },
+    { 0.5, 0.5, 1.0, 0.3 },
+    { 0.05, 0.05, 0.5, 0.3 },
+    { 0.0, 0.0, 1.0, 0.3 },
 };
 
 ATime* GLManager::getClock(){
@@ -59,6 +59,8 @@ void GLManager::drawScreen(void){
 
 	glRotatef(this->rotate_x, 1.0, 0.0, 0.0);
 	glRotatef(this->rotate_y, 0.0, 1.0, 0.0);
+
+	glScaled(scale,scale,scale);
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
@@ -120,6 +122,8 @@ void GLManager::drawScreen(void){
 		/* DRAW 3D Object */
 
 		if(draw3D){
+
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 	
 			if(drawPlane){
 
@@ -147,6 +151,8 @@ void GLManager::drawScreen(void){
 				boat.draw();
 				glPopMatrix();	
 			}
+
+			glPolygonMode(GL_FRONT, GL_FILL);
 		}
 	}
 
@@ -182,6 +188,14 @@ void GLManager::handleSpecial(int key, int x, int y){
 	case GLUT_KEY_DOWN:
 		rotate_x -= 5;
 		break;
+
+	case 'q':
+		scale -= 1.0;
+		break;
+
+	case 'w':
+		scale += 1.0;
+		break;
 	}
 
 	glutPostRedisplay();
@@ -191,6 +205,7 @@ GLManager::GLManager(){
 	
 	this->rotate_x = -90;
 	this->rotate_y = 0;
+	scale = 1.0;
 	simPlane.setPointOne(-GLManager::PLANE_DIM, -GLManager::PLANE_DIM);
 	simPlane.setPointTwo(GLManager::PLANE_DIM, GLManager::PLANE_DIM);
 }

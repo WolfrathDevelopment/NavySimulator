@@ -10,8 +10,12 @@
 
 #include <vector>
 #include <string>
-#include <glm/glm.hpp>
 #include <inttypes.h>
+#include "stdhdr.h"
+
+typedef struct _vec3{
+	GLfloat x,y,z;
+} vec3;
 
 class DrawableOBJ{
 
@@ -24,8 +28,8 @@ public:
 
 private:
 
-	std::vector< glm::vec3 > vertices;
-	std::vector< glm::vec3 > normals;
+	std::vector< vec3 > vertices;
+	std::vector< vec3 > normals;
 };
 
 #endif

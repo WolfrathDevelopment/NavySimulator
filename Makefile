@@ -5,7 +5,7 @@ SOURCES= $(shell find * -type f -name '*.cpp')
 OBJECTS= $(SOURCES:.cpp=.o)
 OUTPUT= simulator
 
-LIBS= -lglut -lfreeimage -lXmu -lXext -lGL -lXi -lGLU
+LIBS= -lglut -lGL -lXi -lGLU
 
 # Are we compiling on a mac?
 
