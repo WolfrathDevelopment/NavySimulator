@@ -74,11 +74,12 @@ void GLManager::drawScreen(void){
 
 	int colorIndex = 0;
 	double x,y,z;
-	bool draw3D, drawShip, drawPlane;
+	bool draw3D, drawShip, drawPlane, finished;
 
     for(itr = nm->begin(); itr != nm->end(); itr++){
 
 		draw3D = drawShip = drawPlane = false;
+		finished = false;
 
 		Movable* obj = (itr->second);
 		hlist = obj->getHistory();
@@ -88,6 +89,10 @@ void GLManager::drawScreen(void){
 			glColor4d(0.8,0.8,0.8,0.0);
 			glEnable(GL_LINE_STIPPLE);
 			glLineStipple(2,0xAAAA);
+			finished = true;
+		}
+		else if(!(itr->second)->isDeployed()){
+			continue;
 		}
 		else{
 			glColor4dv(colors[colorIndex++]);
@@ -96,6 +101,7 @@ void GLManager::drawScreen(void){
 		}
 
 		double z2, mult;
+
 		if(z < 1.0){
 			z2 = 0.0f;
 			mult = 10.0;
@@ -112,7 +118,10 @@ void GLManager::drawScreen(void){
 		for(itr2 = hlist->begin(); itr2 != hlist->end(); itr2++){
 
 			itr2->getXYZ(x,y,z);
-			glVertex3d((x/WIDTH) * mult, z2, ((y/HEIGHT) * mult));
+
+			z /= 50000.0;
+
+			glVertex3d((x/WIDTH) * mult, z, ((y/HEIGHT) * mult));
 		}
 
 		glEnd();
